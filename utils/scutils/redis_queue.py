@@ -39,7 +39,9 @@ class Base(object):
         @requires: The object be serializable
         '''
         if self.encoding.__name__ == 'pickle':
-            return self.encoding.dumps(item, protocol=-1)
+            # Ensure backwards compatibility with python2 scutils
+            # Pickle protocol 2 uses latin1 encoding
+            return self.encoding.dumps(item, protocol=2).decode('latin1')
         else:
             return self.encoding.dumps(item)
 
@@ -47,7 +49,13 @@ class Base(object):
         '''
         Decode an item previously encoded
         '''
-        return self.encoding.loads(encoded_item)
+        if self.encoding.__name__ == 'pickle':
+            # Ensure backwards compatibility with python2 scutils
+            # First decode the encoded_item using the encoding of redis, then
+            # encode to latin1 for pickling
+            return self.encoding.loads(encoded_item.decode('utf8').encode('latin1'))
+        else:
+            return self.encoding.loads(encoded_item)
 
     def __len__(self):
         '''
