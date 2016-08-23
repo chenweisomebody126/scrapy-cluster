@@ -29,7 +29,7 @@ class TestBase(TestCase):
     def test_encode(self):
         q = Base(MagicMock(), 'key', pickle)
         # python pickling is different between versions
-        data = pickle.dumps('cool', protocol=-1)
+        data = pickle.dumps('cool', protocol=2).decode('latin1')
         self.assertEquals(q._encode_item('cool'), data)
         q2 = Base(MagicMock(), 'key', ujson)
         self.assertEquals(q2._encode_item('cool2'), '"cool2"')

@@ -53,7 +53,11 @@ class Base(object):
             # Ensure backwards compatibility with python2 scutils
             # First decode the encoded_item using the encoding of redis, then
             # encode to latin1 for pickling
-            return self.encoding.loads(encoded_item.decode('utf8').encode('latin1'))
+            try:
+                decoded = encoded_item.decode('utf8')
+            except UnicodeDecodeError:
+                decoded = encoded_item.decode('latin1')
+            return self.encoding.loads(decoded.encode('latin1'))
         else:
             return self.encoding.loads(encoded_item)
 
