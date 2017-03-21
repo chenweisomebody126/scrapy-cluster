@@ -1,7 +1,7 @@
 cffi==1.2.1
 characteristic==14.3.0
 ConcurrentLogHandler>=0.9.1
-cryptography==0.9.1
+cryptography==1.5.0
 cssselect==0.9.1
 enum34==1.0.4
 funcsigs==0.4
